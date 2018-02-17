@@ -1,28 +1,47 @@
 package com.example.logonrm.smsbroadcastreceiver
 
-import android.app.Activity
 import android.content.BroadcastReceiver
+
 import android.content.Context
+
 import android.content.Intent
+
 import android.app.NotificationManager
+
 import android.app.PendingIntent
+
 import android.widget.Toast
+
 import android.os.Build
+
 import android.os.Bundle
+
 import android.support.v4.app.NotificationCompat
+
 import android.support.v4.app.TaskStackBuilder
+
 import android.telephony.SmsManager
+
 import android.telephony.SmsMessage
+
 import android.util.Log
 
 
+
+
+
 /**
+
  * Created by logonrm on 17/02/2018.
+
  */
+
 class SMSBroadcastReceiver : BroadcastReceiver() {
 
 
+
     internal val sms = SmsManager.getDefault()
+
 
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -38,6 +57,7 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                 val pdusObj = bundle.get("pdus") as Array<Any>
 
                 for (i in pdusObj.indices) {
+
 
 
                     val currentMessage: SmsMessage
@@ -57,12 +77,15 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                     }
 
 
+
                     val numeroTelefone = currentMessage.getDisplayOriginatingAddress()
+
 
 
                     val mensagem = currentMessage.getDisplayMessageBody()
 
                     Log.i("SmsReceiver", "senderNum: $numeroTelefone; message: $mensagem")
+
 
 
                     val i2 = Intent("android.intent.action.SMSRECEBIDO")
@@ -87,7 +110,10 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
 
         }
 
+
+
     }
+
 
 
     private fun showToast(context: Context, numeroTelefone: String, mensagem: String) {
@@ -103,6 +129,7 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
     }
 
 
+
     private fun showNotification(context: Context, numeroTelefone: String, mensagem: String) {
 
         val mBuilder = NotificationCompat.Builder(context)
@@ -114,6 +141,7 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
         mBuilder.setContentText(mensagem)
 
 
+
         val resultIntent = Intent(context, MainActivity::class.java)
 
 
@@ -123,6 +151,7 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
                 .putExtra("remetente", numeroTelefone)
 
                 .putExtra("mensagem", mensagem)
+
 
 
         val stackBuilder = TaskStackBuilder.create(context)
@@ -140,7 +169,9 @@ class SMSBroadcastReceiver : BroadcastReceiver() {
         mBuilder.setContentIntent(resultPendingIntent)
 
 
+
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
 
 
         // notificationID allows you to update the notification later on.
